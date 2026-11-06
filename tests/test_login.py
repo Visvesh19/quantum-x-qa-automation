@@ -1,12 +1,8 @@
 
 from playwright.sync_api import Page, expect
-from pages.login_page import LoginPage
 
 
-def test_valid_login(page: Page):
-    login_page = LoginPage(page)
-    login_page.open()
-
+def test_valid_login(page: Page, login_page):
     login_page.login("standard_user", "secret_sauce")
 
     expect(page).to_have_url(
@@ -15,10 +11,7 @@ def test_valid_login(page: Page):
     expect(page.locator(".title")).to_have_text("Products")
 
 
-def test_invalid_login(page: Page):
-    login_page = LoginPage(page)
-    login_page.open()
-
+def test_invalid_login(login_page):
     login_page.login("invalid_user", "wrong_password")
 
     expect(login_page.error_message).to_contain_text(
